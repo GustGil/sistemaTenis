@@ -1,0 +1,56 @@
+package crawler
+
+import (
+	"log"
+	"net/http/cookiejar"
+	"strings"
+	"time"
+
+	"github.com/gocolly/colly"
+)
+
+func InitCollector(allowedDomains string) *colly.Collector {
+	jar, _ := cookiejar.New(nil)
+
+	c := colly.NewCollector(
+		colly.AllowedDomains(
+			allowedDomains,
+		),
+		colly.Async(true),
+		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"),
+	)
+
+	c.SetCookieJar(jar)
+
+	c.Limit(&colly.LimitRule{
+		DomainGlob:  "*",
+		Parallelism: 2,
+		RandomDelay: 2 * time.Second,
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36")
+		r.Headers.Set("Accept", "text/html,application/xhtml+xml")
+		r.Headers.Set("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8")
+		r.Headers.Set("Referer", "https://www.nike.com.br/")
+		r.Headers.Set("Connection", "keep-alive")
+		log.Println("[CRAWLER][VISIT]", r.URL.String())
+	})
+
+	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+		href := strings.TrimSpace(e.Attr("href"))
+		if href == "" {
+			return
+		}
+
+		abs := e.Request.AbsoluteURL(href)
+		abs = NormalizeURL(abs)
+		if abs == "" {
+			return
+		}
+		lower := strings.ToLower(abs)
+		ProcessLink(c, lower)
+	})
+
+	return c
+}
