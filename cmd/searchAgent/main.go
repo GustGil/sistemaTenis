@@ -1,7 +1,9 @@
 package main
 
-import "sistemaTenis/internal/searchAgent"
+import (
+	"sistemaTenis/internal/queryGenerator"
+)
 
 func main() {
-	searchAgent.Init()
+	queryGenerator.Init()
 }

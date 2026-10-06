@@ -2,12 +2,13 @@ package product
 
 import (
 	"sistemaTenis/internal/data"
+	"sistemaTenis/internal/models"
 	"sistemaTenis/repository"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
-func SaveBasic(shoe *Tenis) {
+func SaveBasic(shoe *models.Tenis) {
 	repository.InsertAny("SneakerDB", "shoe", shoe)
 }
 

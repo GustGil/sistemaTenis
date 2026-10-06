@@ -1,13 +1,13 @@
-package searchAgent
+package promptGenerator
 
 import (
 	"fmt"
-	"sistemaTenis/internal/product"
+	"sistemaTenis/internal/models"
 
 	ollama "github.com/prathyushnallamothu/ollamago"
 )
 
-func generatePrompt(tenis *product.Tenis) []ollama.Message {
+func GeneratePrompt(tenis *models.Tenis) []ollama.Message {
 	message := []ollama.Message{{
 		Role: "system",
 		Content: `Você é um especialista em tênis esportivos e em pesquisa na internet.

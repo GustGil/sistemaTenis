@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"sistemaTenis/internal/models"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -82,4 +83,29 @@ func ProjectionAny(database, collection string, Param *bson.M) []bson.M {
 		return nil
 	}
 	return result
+}
+
+func GetAnyByID(ctx context.Context, col string, idHex string) (*models.Tenis, error) {
+	c := GetCollection("SneakerDB", col)
+	objID, err := bson.ObjectIDFromHex(idHex)
+	fmt.Println(objID)
+	if err != nil {
+		return nil, fmt.Errorf("ID inválido: %w", err)
+	}
+
+	var u models.Tenis
+	filter := bson.M{"_id": objID}
+
+	fmt.Printf("Filtro: %+v\n", filter)
+
+	err = c.FindOne(ctx, filter).Decode(&u)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, fmt.Errorf("usuário não encontrado")
+		}
+		return nil, fmt.Errorf("erro ao buscar usuário: %w", err)
+	}
+
+	return &u, nil
+
 }

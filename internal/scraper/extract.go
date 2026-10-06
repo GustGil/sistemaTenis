@@ -3,13 +3,13 @@ package scraper
 import (
 	"log"
 	"sistemaTenis/internal/data"
-	"sistemaTenis/internal/product"
+	"sistemaTenis/internal/models"
 
 	"github.com/gocolly/colly"
 )
 
-func ScrapeProduct(c *colly.Collector, link string) (*product.Tenis, error) {
-	shoe := product.Tenis{
+func ScrapeProduct(c *colly.Collector, link string) (*models.Tenis, error) {
+	shoe := models.Tenis{
 		Url: link,
 	}
 
