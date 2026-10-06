@@ -1,0 +1,1 @@
+O <Nome sistema> surge da necessidade de uma especie de blog especializado em tenis esportivos, sendo uma ferramenta de busca, comparação e ensinamento sobre questões do calçados esportivos. Segue informações interessantes sobre o sistema presente nesse repositorio
